@@ -1,9 +1,11 @@
-package com.github.alex.quarkus.nacos.client.runtime;
+package com.github.alex.quarkus.nacos.client.runtime.config;
 
 import com.alibaba.nacos.api.NacosFactory;
 import com.alibaba.nacos.api.PropertyKeyConst;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
+import com.github.alex.quarkus.nacos.client.runtime.NacosConfig;
+import com.github.alex.quarkus.nacos.client.runtime.NacosConfigDelegation;
 import io.smallrye.config.ConfigSourceContext;
 import io.smallrye.config.ConfigSourceFactory;
 import org.eclipse.microprofile.config.spi.ConfigSource;
@@ -19,15 +21,13 @@ class NacosConfigSourceFactory implements ConfigSourceFactory.ConfigurableConfig
 
     @Override
     public Iterable<ConfigSource> getConfigSources(ConfigSourceContext configSourceContext, NacosConfig nacosConfig) {
-        ConfigParser config = new ConfigParser(nacosConfig);
+        NacosConfigDelegation config = new NacosConfigDelegation(nacosConfig);
         if (!config.enabled()) {
-            log.info("nacos配置未开启");
             return Collections.emptyList();
         } else {
-            log.info("nacos配置启用");
+            log.info("============== nacos is enabled =============");
         }
         List<ConfigSource> configSources = new ArrayList<>(1);
-
         Properties properties = new Properties();
         properties.setProperty(PropertyKeyConst.SERVER_ADDR, config.serverAddr());
         properties.setProperty(PropertyKeyConst.NAMESPACE, config.namespace());

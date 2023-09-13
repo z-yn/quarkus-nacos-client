@@ -1,4 +1,4 @@
-package com.github.alex.quarkus.nacos.client.runtime;
+package com.github.alex.quarkus.nacos.client.runtime.config;
 
 import io.quarkus.runtime.configuration.ConfigBuilder;
 import io.smallrye.config.SmallRyeConfigBuilder;

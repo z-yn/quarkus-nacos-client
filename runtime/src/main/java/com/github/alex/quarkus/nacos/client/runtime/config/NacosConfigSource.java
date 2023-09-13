@@ -1,8 +1,9 @@
-package com.github.alex.quarkus.nacos.client.runtime;
+package com.github.alex.quarkus.nacos.client.runtime.config;
 
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.listener.AbstractListener;
 import com.alibaba.nacos.api.exception.NacosException;
+import com.github.alex.quarkus.nacos.client.runtime.NacosConfigDelegation;
 import org.eclipse.microprofile.config.spi.ConfigSource;
 import org.jboss.logging.Logger;
 
@@ -15,24 +16,32 @@ public class NacosConfigSource implements ConfigSource {
     private static final Logger log = Logger.getLogger(NacosConfigSource.class);
 
     private static final String NAME_FORMAT = "NacosConfigSource[%s]";
-    private static final Integer GET_CONFIG_TIMEOUT = 1000 * 60; //60s
-    private final ConfigParser nacosConfig;
+    private static final Integer NACOS_CONFIG_TIMEOUT = 30000;
+    private final NacosConfigDelegation nacosConfig;
     private final ConfigService configService;
-    private final Map<String, String> configMap = new ConcurrentHashMap<>();
+    private final Map<String, Configuration> configMap = new ConcurrentHashMap<>();
+    private Map<String, String> mergedConfigs = new HashMap<>();
 
-    NacosConfigSource(ConfigService configService, ConfigParser nacosConfig) {
+    NacosConfigSource(ConfigService configService, NacosConfigDelegation nacosConfig) {
         this.nacosConfig = nacosConfig;
         this.configService = configService;
-        this.configMap.putAll(this.initNacosConfig());
+        this.initNacosConfig();
         this.startConfigListener();
     }
 
     private void startConfigListener() {
+        for (String dataId : nacosConfig.configIdListOrdered()) {
+            listenConfig(dataId);
+        }
+    }
+
+    private void listenConfig(String dataId) {
         try {
-            configService.addListener(nacosConfig.dataId(), nacosConfig.group(), new AbstractListener() {
+            configService.addListener(dataId, nacosConfig.group(), new AbstractListener() {
                 @Override
                 public void receiveConfigInfo(String configInfo) {
-                    configMap.putAll(NacosUtils.stringToMap(configInfo, nacosConfig.format()));
+                    configMap.put(dataId, new Configuration(dataId, configInfo, nacosConfig.format()));
+                    mergeConfig();
                 }
             });
         } catch (NacosException e) {
@@ -46,29 +55,42 @@ public class NacosConfigSource implements ConfigSource {
         return 200; // 配置加载优先级高于本机配置低于环境变量配置
     }
 
-    private Map<String, String> initNacosConfig() {
+    private void initNacosConfig() {
         try {
-            String context = configService.getConfig(nacosConfig.dataId(), nacosConfig.group(), GET_CONFIG_TIMEOUT);
-            return NacosUtils.stringToMap(context, nacosConfig.format());
+            for (String dataId : nacosConfig.configIdListOrdered()) {
+                String context = configService.getConfig(dataId, nacosConfig.group(), NACOS_CONFIG_TIMEOUT);
+                configMap.put(dataId, new Configuration(dataId, context, nacosConfig.format()));
+            }
         } catch (NacosException e) {
             log.error(e.getMessage(), e);
         }
-        return new HashMap<>();
+        this.mergeConfig();
     }
 
     @Override
     public Map<String, String> getProperties() {
-        return configMap;
+        return mergedConfigs;
     }
 
     @Override
     public Set<String> getPropertyNames() {
-        return configMap.keySet();
+        return mergedConfigs.keySet();
+    }
+
+    public synchronized void mergeConfig() {
+        Map<String, String> all = new HashMap<>();
+        for (String s : nacosConfig.configIdListOrdered()) {
+            Configuration configuration = this.configMap.get(s);
+            if (configuration != null) {
+                all.putAll(configuration.configs);
+            }
+        }
+        mergedConfigs = all;
     }
 
     @Override
     public String getValue(String propertyName) {
-        return configMap.get(propertyName);
+        return mergedConfigs.get(propertyName);
     }
 
     @Override

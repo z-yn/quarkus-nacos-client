@@ -1,11 +1,13 @@
 package com.github.alex.quarkus.nacos.client.runtime;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-public class ConfigParser {
+public class NacosConfigDelegation {
     private final NacosConfig config;
 
-    public ConfigParser(NacosConfig config) {
+    public NacosConfigDelegation(NacosConfig config) {
         this.config = config;
     }
 
@@ -33,12 +35,12 @@ public class ConfigParser {
         return config.password();
     }
 
-    public NacosConfig.Format format() {
-        return config.format().orElse(NacosConfig.Format.properties);
+    public ConfigFileFormat format() {
+        return config.format().orElse(ConfigFileFormat.properties);
     }
 
     public String profile() {
-        return config.profile().orElse("");
+        return config.profile().orElse(null);
     }
 
     public boolean enabled() {
@@ -47,5 +49,14 @@ public class ConfigParser {
 
     public String dataId() {
         return appId() + "." + format();
+    }
+
+    public List<String> configIdListOrdered() {
+        List<String> list = new ArrayList<>();
+        list.add("application." + format());
+        config.profile().ifPresent(it -> list.add("application-" + it + "." + format()));
+        list.add(appId() + "." + format());
+        config.profile().ifPresent(it -> list.add(appId() + "-" + it + "." + format()));
+        return list;
     }
 }

@@ -1,6 +1,8 @@
-package com.github.alex.quarkus.nacos.client.runtime;
+package com.github.alex.quarkus.nacos.client.runtime.config;
 
+import com.github.alex.quarkus.nacos.client.runtime.ConfigFileFormat;
 import io.smallrye.config.common.utils.ConfigSourceUtil;
+import org.jboss.logging.Logger;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
@@ -9,30 +11,40 @@ import java.io.StringReader;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class NacosUtils {
 
-    private NacosUtils() {
+public class Configuration {
+    private static final Logger log = Logger.getLogger(Configuration.class);
+    final Map<String, String> configs;
+    final String id;
+    final ConfigFileFormat type;
+
+    public Configuration(String id, String content, ConfigFileFormat type) {
+        this.id = id;
+        this.type = type;
+        this.configs = stringToMap(content, type);
     }
 
-    public static Map<String, String> stringToMap(String str, NacosConfig.Format type) {
+    public static Map<String, String> stringToMap(String str, ConfigFileFormat type) {
         Map<String, String> config = new HashMap<>();
+        if (str == null) return config;
         try {
-            if (type.equals(NacosConfig.Format.properties)) {
+            if (type.equals(ConfigFileFormat.properties)) {
                 Properties properties = new Properties();
                 StringReader reader = new StringReader(str);
                 properties.load(reader);
                 config.putAll(ConfigSourceUtil.propertiesToMap(properties));
             }
-            if (type.equals(NacosConfig.Format.yaml) || type.equals(NacosConfig.Format.yml)) {
+            if (type.equals(ConfigFileFormat.yaml) || type.equals(ConfigFileFormat.yml)) {
                 config.putAll(yamlStringToMap(str));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return config;
     }
 
     private static Map<String, String> yamlStringToMap(String str) {
+        if (str == null) return new HashMap<>();
         Map<String, Object> yamlInput = (new Yaml()).loadAs(str, HashMap.class);
         return yamlInputToMap(yamlInput);
     }
@@ -42,7 +54,6 @@ public class NacosUtils {
         if (yamlInput != null) {
             flattenYaml("", yamlInput, properties);
         }
-
         return properties;
     }
 
@@ -99,20 +110,9 @@ public class NacosUtils {
         for (int i = 0; i < src.length(); i += Character.charCount(cp)) {
             cp = src.codePointAt(i);
             if (cp == 92 || cp == 44) {
-                for (int j = 0; j < escapeLevel; ++j) {
-                    b.append('\\');
-                }
+                b.append("\\".repeat(Math.max(0, escapeLevel)));
             }
             b.appendCodePoint(cp);
         }
-
-    }
-
-    public static String systemConfigOrValue(String key, String value) {
-        String property = System.getProperty(key);
-        if (property != null) {
-            return property;
-        }
-        return value;
     }
 }

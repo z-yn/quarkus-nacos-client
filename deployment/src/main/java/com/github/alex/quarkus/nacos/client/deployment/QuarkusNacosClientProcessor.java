@@ -1,6 +1,6 @@
 package com.github.alex.quarkus.nacos.client.deployment;
 
-import com.github.alex.quarkus.nacos.client.runtime.NacosConfigSourceFactoryBuilder;
+import com.github.alex.quarkus.nacos.client.runtime.config.NacosConfigSourceFactoryBuilder;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.builditem.ExtensionSslNativeSupportBuildItem;

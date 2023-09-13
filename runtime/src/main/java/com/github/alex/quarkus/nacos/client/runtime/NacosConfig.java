@@ -48,7 +48,7 @@ public interface NacosConfig {
      * format: properties, yaml, yml
      */
     @WithDefault("properties")
-    Optional<Format> format();
+    Optional<ConfigFileFormat> format();
 
     /**
      * profile,eg: dev , master etc
@@ -61,7 +61,4 @@ public interface NacosConfig {
     @WithDefault("false")
     boolean enabled();
 
-    enum Format {
-        properties, yaml, yml
-    }
 }
