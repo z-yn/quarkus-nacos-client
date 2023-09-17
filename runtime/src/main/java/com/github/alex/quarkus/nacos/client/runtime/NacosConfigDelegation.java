@@ -1,8 +1,6 @@
 package com.github.alex.quarkus.nacos.client.runtime;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class NacosConfigDelegation {
     private final NacosConfig config;
@@ -19,8 +17,8 @@ public class NacosConfigDelegation {
         return config.group().orElse("DEFAULT_GROUP");
     }
 
-    public String namespace() {
-        return config.namespace().orElse("");
+    public Optional<String> namespace() {
+        return config.namespace();
     }
 
     public String serverAddr() {
@@ -58,5 +56,16 @@ public class NacosConfigDelegation {
         list.add(appId() + "." + format());
         config.profile().ifPresent(it -> list.add(appId() + "-" + it + "." + format()));
         return list;
+    }
+
+    public Map<String, String> storkConfig() {
+        Map<String, String> storkConfig = new HashMap<>();
+        storkConfig.put("quarkus.stork.*.service-discovery.type", "nacos");
+        storkConfig.put("quarkus.stork.*.service-discovery.server-addr", serverAddr());
+        username().ifPresent(it -> storkConfig.put("quarkus.stork.*.service-discovery.username", it));
+        password().ifPresent(it -> storkConfig.put("quarkus.stork.*.service-discovery.password", it));
+        namespace().ifPresent(it -> storkConfig.put("quarkus.stork.*.service-discovery.nacos-namespace", it));
+        storkConfig.put("quarkus.stork.*.service-discovery.nacos-group", group());
+        return storkConfig;
     }
 }

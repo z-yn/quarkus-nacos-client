@@ -85,6 +85,7 @@ public class NacosConfigSource implements ConfigSource {
                 all.putAll(configuration.configs);
             }
         }
+        all.putAll(nacosConfig.storkConfig());
         mergedConfigs = all;
     }
 

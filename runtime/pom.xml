@@ -23,6 +23,10 @@
             <artifactId>nacos-client</artifactId>
             <version>${nacos.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.smallrye.stork</groupId>
+            <artifactId>stork-core</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -51,6 +55,11 @@
                             <groupId>io.quarkus</groupId>
                             <artifactId>quarkus-extension-processor</artifactId>
                             <version>${quarkus.version}</version>
+                        </path>
+                        <path>
+                            <groupId>io.smallrye.stork</groupId>
+                            <artifactId>stork-configuration-generator</artifactId>
+                            <version>2.3.1</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>

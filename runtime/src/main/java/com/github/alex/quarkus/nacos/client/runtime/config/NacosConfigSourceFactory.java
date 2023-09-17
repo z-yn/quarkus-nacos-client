@@ -30,7 +30,7 @@ class NacosConfigSourceFactory implements ConfigSourceFactory.ConfigurableConfig
         List<ConfigSource> configSources = new ArrayList<>(1);
         Properties properties = new Properties();
         properties.setProperty(PropertyKeyConst.SERVER_ADDR, config.serverAddr());
-        properties.setProperty(PropertyKeyConst.NAMESPACE, config.namespace());
+        properties.setProperty(PropertyKeyConst.NAMESPACE, config.namespace().orElse(""));
         config.username().ifPresent(it -> properties.setProperty(PropertyKeyConst.USERNAME, it));
         config.password().ifPresent(it -> properties.setProperty(PropertyKeyConst.PASSWORD, it));
         try {
