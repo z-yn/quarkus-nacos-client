@@ -10,6 +10,7 @@
   <modules>
     <module>deployment</module>
     <module>runtime</module>
+      <module>quarkus-nacos-client-test</module>
   </modules>
   <properties>
     <compiler-plugin.version>3.11.0</compiler-plugin.version>

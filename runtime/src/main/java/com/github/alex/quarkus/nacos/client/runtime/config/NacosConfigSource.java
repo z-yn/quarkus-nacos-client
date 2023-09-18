@@ -52,7 +52,7 @@ public class NacosConfigSource implements ConfigSource {
     @Override
     public int getOrdinal() {
         //https://github.com/eclipse/microprofile-config/blob/main/spec/src/main/asciidoc/configsources.asciidoc#custom-configsources-via-configsourceprovider
-        return 200; // 配置加载优先级高于本机配置低于环境变量配置
+        return 120; // 配置加载优先级高于本机配置低于环境变量配置
     }
 
     private void initNacosConfig() {
