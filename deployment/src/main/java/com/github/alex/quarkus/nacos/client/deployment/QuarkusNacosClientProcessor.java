@@ -4,11 +4,13 @@ import com.github.alex.quarkus.nacos.client.runtime.config.NacosConfigSourceFact
 import com.github.alex.quarkus.nacos.client.runtime.service_discovery.NacosServiceDiscoveryProvider;
 import com.github.alex.quarkus.nacos.client.runtime.service_discovery.NacosServiceDiscoveryProviderLoader;
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
+import io.quarkus.arc.deployment.BeanDefiningAnnotationBuildItem;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.builditem.ExtensionSslNativeSupportBuildItem;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.deployment.builditem.RunTimeConfigBuilderBuildItem;
+import org.jboss.jandex.DotName;
 
 class QuarkusNacosClientProcessor {
 
@@ -28,6 +30,12 @@ class QuarkusNacosClientProcessor {
     AdditionalBeanBuildItem additionalBeans() {
         return new AdditionalBeanBuildItem(NacosServiceDiscoveryProvider.class,
                 NacosServiceDiscoveryProviderLoader.class);
+    }
+
+    BeanDefiningAnnotationBuildItem beanDefiningAnnotation() {
+        return new BeanDefiningAnnotationBuildItem(
+                DotName.createSimple("com.github.alex.quarkus.nacos.client.runtime.ServiceDiscoveryNacos")
+        );
     }
 
     @BuildStep

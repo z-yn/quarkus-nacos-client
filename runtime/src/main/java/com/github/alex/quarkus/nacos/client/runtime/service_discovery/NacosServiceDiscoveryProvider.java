@@ -1,5 +1,6 @@
 package com.github.alex.quarkus.nacos.client.runtime.service_discovery;
 
+import com.alibaba.nacos.api.exception.NacosException;
 import io.smallrye.stork.api.ServiceDiscovery;
 import io.smallrye.stork.api.config.ServiceConfig;
 import io.smallrye.stork.api.config.ServiceDiscoveryAttribute;
@@ -26,6 +27,10 @@ public class NacosServiceDiscoveryProvider implements ServiceDiscoveryProvider<N
                                                    String serviceName,
                                                    ServiceConfig serviceConfig,
                                                    StorkInfrastructure storkInfrastructure) {
-        return new NacosServiceDiscovery(nacosConfig, serviceName);
+        try {
+            return new NacosServiceDiscovery(nacosConfig, serviceName);
+        } catch (NacosException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
