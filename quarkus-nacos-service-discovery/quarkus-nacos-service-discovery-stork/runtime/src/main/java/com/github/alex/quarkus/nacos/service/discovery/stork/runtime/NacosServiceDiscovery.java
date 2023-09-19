@@ -25,7 +25,7 @@ public class NacosServiceDiscovery implements ServiceDiscovery {
         this.serviceName = serviceName;
         Properties properties = new Properties();
         properties.setProperty(PropertyKeyConst.SERVER_ADDR, nacosConfig.getServerAddr());
-        properties.setProperty(PropertyKeyConst.NAMESPACE, Optional.ofNullable(nacosConfig.getNacosNamespace())
+        properties.setProperty(PropertyKeyConst.NAMESPACE, Optional.ofNullable(nacosConfig.getNamespace())
                 .orElse(""));
         Optional.ofNullable(nacosConfig.getUsername())
                 .ifPresent(it -> properties.setProperty(PropertyKeyConst.USERNAME, it));

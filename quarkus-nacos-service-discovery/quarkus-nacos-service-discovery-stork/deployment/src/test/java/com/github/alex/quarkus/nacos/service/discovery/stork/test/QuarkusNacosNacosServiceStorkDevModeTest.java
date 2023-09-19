@@ -1,19 +1,18 @@
 package com.github.alex.quarkus.nacos.service.discovery.stork.test;
 
+import io.quarkus.test.QuarkusDevModeTest;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
-import io.quarkus.test.QuarkusDevModeTest;
-
-public class QuarkusNacosServiceDiscoveryStorkDevModeTest {
+public class QuarkusNacosNacosServiceStorkDevModeTest {
 
     // Start hot reload (DevMode) test with your extension loaded
     @RegisterExtension
     static final QuarkusDevModeTest devModeTest = new QuarkusDevModeTest()
-        .setArchiveProducer(() -> ShrinkWrap.create(JavaArchive.class));
+            .setArchiveProducer(() -> ShrinkWrap.create(JavaArchive.class));
 
     @Test
     public void writeYourOwnDevModeTest() {

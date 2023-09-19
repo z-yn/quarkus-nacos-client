@@ -5,7 +5,6 @@ import io.smallrye.stork.api.ServiceDiscovery;
 import io.smallrye.stork.api.config.ServiceConfig;
 import io.smallrye.stork.api.config.ServiceDiscoveryAttribute;
 import io.smallrye.stork.api.config.ServiceDiscoveryType;
-import io.smallrye.stork.impl.CachingServiceDiscovery;
 import io.smallrye.stork.spi.ServiceDiscoveryProvider;
 import io.smallrye.stork.spi.StorkInfrastructure;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,9 +16,8 @@ import jakarta.enterprise.context.ApplicationScoped;
         description = "password")
 @ServiceDiscoveryAttribute(name = "password",
         description = "username")
-@ServiceDiscoveryAttribute(name = "nacos-group", description = "nacos group")
-@ServiceDiscoveryAttribute(name = "nacos-namespace", description = "nacos namespace")
-@ServiceDiscoveryAttribute(name = "refresh-period", description = "Service discovery cache refresh period.", defaultValue = CachingServiceDiscovery.DEFAULT_REFRESH_INTERVAL)
+@ServiceDiscoveryAttribute(name = "group", description = "nacos group")
+@ServiceDiscoveryAttribute(name = "namespace", description = "nacos namespace")
 @ApplicationScoped
 public class NacosServiceDiscoveryProvider implements ServiceDiscoveryProvider<NacosConfiguration> {
     @Override

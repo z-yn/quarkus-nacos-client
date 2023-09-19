@@ -1,4 +1,4 @@
-package com.github.alex.quarkus.nacos.service.discovery.stork.runtime.processor;
+package com.github.alex.quarkus.nacos.service.discovery.stork.runtime;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,5 +7,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
-public @interface ServiceDiscovery {
+public @interface NacosService {
+    String value();
 }

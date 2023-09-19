@@ -1,4 +1,4 @@
-package com.github.alex.quarkus.nacos.config.runtime;
+package com.github.alex.quarkus.nacos.service.discovery.stork.runtime;
 
 import io.quarkus.runtime.annotations.ConfigPhase;
 import io.quarkus.runtime.annotations.ConfigRoot;
@@ -31,6 +31,7 @@ public interface NacosConfig {
     /**
      * 地址
      */
+    @WithDefault("127.0.0.1:8848")
     Optional<String> serverAddr();
 
     /**
@@ -43,15 +44,5 @@ public interface NacosConfig {
      */
     Optional<String> password();
 
-    /**
-     * format: properties, yaml, yml
-     */
-    @WithDefault("properties")
-    Optional<ConfigFileFormat> format();
-
-    /**
-     * profile,eg: dev , master etc
-     */
-    Optional<String> profile();
 
 }
