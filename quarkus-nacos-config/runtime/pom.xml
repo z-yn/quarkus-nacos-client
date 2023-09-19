@@ -8,8 +8,8 @@
         <artifactId>quarkus-nacos-client-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <artifactId>quarkus-nacos-client</artifactId>
-    <name>Quarkus Nacos Client - Runtime</name>
+    <artifactId>quarkus-nacos-config</artifactId>
+    <name>Quarkus Nacos Config - Runtime</name>
     <properties>
         <nacos.version>1.4.4</nacos.version>
     </properties>
