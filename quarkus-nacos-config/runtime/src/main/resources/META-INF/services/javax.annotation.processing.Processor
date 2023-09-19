@@ -1,1 +1,1 @@
-com.github.alex.quarkus.nacos.client.runtime.processor.ServiceDiscoveryProcessor
+com.github.alex.quarkus.nacos.config.runtime.processor.ServiceDiscoveryProcessor
