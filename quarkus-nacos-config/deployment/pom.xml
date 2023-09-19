@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.github.alex</groupId>
-        <artifactId>quarkus-nacos-client-parent</artifactId>
+        <artifactId>quarkus-nacos-config-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <artifactId>quarkus-nacos-client-deployment</artifactId>
-    <name>Quarkus Nacos Client - Deployment</name>
+    <artifactId>quarkus-nacos-config-deployment</artifactId>
+    <name>Quarkus Nacos Config - Deployment</name>
     <dependencies>
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -17,7 +17,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.alex</groupId>
-            <artifactId>quarkus-nacos-client</artifactId>
+            <artifactId>quarkus-nacos-config</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
