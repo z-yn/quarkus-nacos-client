@@ -9,7 +9,7 @@
     <packaging>pom</packaging>
     <name>Quarkus Nacos Client - Parent</name>
     <modules>
-        <module>quarkus-nacos-config</module>
-        <module>quarkus-nacos-service-discovery</module>
+        <module>quarkus-config-nacos</module>
+        <module>quarkus-stork-service-discovery-nacos</module>
     </modules>
 </project>
