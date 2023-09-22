@@ -10,9 +10,9 @@ import org.slf4j.LoggerFactory;
 public class NacosServiceRegistrar implements ServiceRegistrar<NacosMetadataKey> {
 
     private static final Logger log = LoggerFactory.getLogger(NacosServiceRegistrar.class);
-    private final NacosRegistrarConfiguration config;
+    private final NacosConfigDelegation config;
 
-    public NacosServiceRegistrar(NacosRegistrarConfiguration config, String serviceName,
+    public NacosServiceRegistrar(NacosConfigDelegation config, String serviceName,
                                  StorkInfrastructure infrastructure) {
         this.config = config;
     }
